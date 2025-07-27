@@ -5,27 +5,20 @@
   <title>С Днём Рождения!</title>
   <style>
     body {
-      margin: 0;
       background: #121212;
       color: white;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      font-family: sans-serif;
       text-align: center;
+      padding-top: 80px;
     }
 
     .cake {
-      width: 200px;
-      height: 180px;
-      background: #d2691e;
-      border-radius: 10px;
       position: relative;
-      margin-bottom: 20px;
-      cursor: pointer;
+      width: 200px;
+      height: 150px;
+      margin: 0 auto;
+      background: chocolate;
+      border-radius: 10px;
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
@@ -34,10 +27,14 @@
       top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 28px;
-      animation: flicker 0.3s infinite alternate;
-      opacity: 1;
-      transition: opacity 0.5s ease;
+      font-size: 32px;
+      animation: flicker 0.2s infinite alternate;
+      transition: opacity 0.3s ease;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.1) rotate(2deg); }
     }
 
     .smoke {
@@ -47,32 +44,36 @@
       transform: translateX(-50%);
       font-size: 24px;
       opacity: 0;
-      transition: opacity 1s ease;
+      animation: rise 1.5s ease-out forwards;
     }
 
-    @keyframes flicker {
-      from { transform: translateX(-50%) scale(1); }
-      to { transform: translateX(-50%) scale(1.1) rotate(3deg); }
+    @keyframes rise {
+      from { opacity: 0; transform: translateX(-50%) translateY(0); }
+      to { opacity: 1; transform: translateX(-50%) translateY(-40px); }
+    }
+
+    #label {
+      margin-top: 20px;
+      font-size: 18px;
     }
 
     #start-btn {
-      padding: 15px 30px;
-      background: #ffffff;
-      color: #000;
-      font-size: 18px;
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
+      background: white;
+      color: black;
       cursor: pointer;
-      margin-top: 20px;
-      display: none;
     }
 
     video {
       display: none;
-      max-width: 90vw;
-      max-height: 50vh;
+      max-width: 80vw;
+      margin-top: 30px;
       border-radius: 12px;
-      margin-top: 20px;
     }
 
     #typed-text {
@@ -97,15 +98,15 @@
   </style>
 </head>
 <body>
-  <div class="cake" id="cake">
+  <div class="cake" onclick="blowCandle()">
     <div class="flame" id="flame">🔥</div>
-    <div class="smoke" id="smoke">💨</div>
-    <div style="position:absolute;bottom:10px;width:100%;font-size:18px;">🎂 Задуй свечу 🎂</div>
+    <div class="smoke" id="smoke" style="display:none;">💨</div>
   </div>
+  <div id="label">Нажми на торт, чтобы задуть свечу 🎂</div>
 
-  <button id="start-btn">Нажми, чтобы посмотреть 🎥</button>
+  <button id="start-btn" onclick="playVideo()">Нажми, чтобы посмотреть 🎥</button>
 
-  <video id="video" controls playsinline>
+  <video id="video" controls>
     <source src="video.mp4" type="video/mp4" />
     Ваш браузер не поддерживает видео.
   </video>
@@ -113,40 +114,43 @@
   <div id="typed-text"></div>
 
   <script>
-    const cake = document.getElementById('cake');
-    const flame = document.getElementById('flame');
-    const smoke = document.getElementById('smoke');
-    const button = document.getElementById('start-btn');
-    const video = document.getElementById('video');
-    const typedText = document.getElementById('typed-text');
+    function blowCandle() {
+      const flame = document.getElementById('flame');
+      const smoke = document.getElementById('smoke');
+      const label = document.getElementById('label');
+      const btn = document.getElementById('start-btn');
 
-    cake.addEventListener('click', () => {
-      flame.style.opacity = 0;
-      smoke.style.opacity = 1;
+      flame.style.opacity = '0';
+      smoke.style.display = 'block';
+      label.textContent = 'Ура! 🎉';
       setTimeout(() => {
-        button.style.display = 'inline-block';
-      }, 800);
-    });
+        btn.style.display = 'inline-block';
+      }, 1000);
+    }
 
-    button.addEventListener('click', () => {
-      button.style.display = 'none';
+    function playVideo() {
+      const video = document.getElementById('video');
+      const btn = document.getElementById('start-btn');
+      btn.style.display = 'none';
       video.style.display = 'block';
       video.play();
-    });
+    }
+
+    const video = document.getElementById('video');
+    const typedText = document.getElementById('typed-text');
 
     video.addEventListener('ended', () => {
       startTyping();
     });
 
     function startTyping() {
-      const message = "Дорогой друг!
-С днём рождения тебя 🎉 Желаем счастья, здоровья и исполнения всех мечт! Спасибо, что ты есть 💖";
-      let index = 0;
+      const message = "С Днём Рождения! 🎉\nПусть этот день будет ярким и радостным!\nТы супер! 💖";
+      let i = 0;
       typedText.classList.add('typing');
       const interval = setInterval(() => {
-        typedText.textContent = message.slice(0, index);
-        index++;
-        if (index > message.length) {
+        typedText.textContent = message.slice(0, i);
+        i++;
+        if (i > message.length) {
           clearInterval(interval);
           typedText.classList.remove('typing');
         }
