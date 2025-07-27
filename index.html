@@ -2,17 +2,58 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Поздравление!</title>
   <style>
-    body { margin: 0; background: black; display: flex; justify-content: center; align-items: center; height: 100vh; }
-    video { max-width: 100%; max-height: 100vh; }
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: sans-serif;
+      color: white;
+    }
+    #start-btn {
+      background: #ffffff;
+      color: #000000;
+      padding: 20px 40px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #start-btn:hover {
+      background: #e0e0e0;
+    }
+    video {
+      display: none;
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
   </style>
 </head>
 <body>
-  <video autoplay muted playsinline controls>
+  <h1>🎉 Поздравление 🎉</h1>
+  <button id="start-btn">Нажми, чтобы услышать 🎉</button>
+  <video id="video" controls playsinline>
     <source src="video.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
   </video>
+
+  <script>
+    const btn = document.getElementById('start-btn');
+    const video = document.getElementById('video');
+
+    btn.addEventListener('click', () => {
+      btn.style.display = 'none';
+      video.style.display = 'block';
+      video.play();
+    });
+  </script>
 </body>
 </html>
