@@ -34,8 +34,25 @@
       top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 24px;
+      font-size: 28px;
+      animation: flicker 0.3s infinite alternate;
+      opacity: 1;
       transition: opacity 0.5s ease;
+    }
+
+    .smoke {
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.1) rotate(3deg); }
     }
 
     #start-btn {
@@ -82,6 +99,7 @@
 <body>
   <div class="cake" id="cake">
     <div class="flame" id="flame">🔥</div>
+    <div class="smoke" id="smoke">💨</div>
     <div style="position:absolute;bottom:10px;width:100%;font-size:18px;">🎂 Задуй свечу 🎂</div>
   </div>
 
@@ -97,13 +115,17 @@
   <script>
     const cake = document.getElementById('cake');
     const flame = document.getElementById('flame');
+    const smoke = document.getElementById('smoke');
     const button = document.getElementById('start-btn');
     const video = document.getElementById('video');
     const typedText = document.getElementById('typed-text');
 
     cake.addEventListener('click', () => {
       flame.style.opacity = 0;
-      button.style.display = 'inline-block';
+      smoke.style.opacity = 1;
+      setTimeout(() => {
+        button.style.display = 'inline-block';
+      }, 800);
     });
 
     button.addEventListener('click', () => {
