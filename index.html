@@ -1,98 +1,135 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Поздравление!</title>
+  <meta charset="UTF-8" />
+  <title>С Днём Рождения!</title>
   <style>
     body {
       margin: 0;
-      background: black;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      font-family: sans-serif;
+      background: #121212;
       color: white;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .cake {
+      width: 200px;
+      height: 180px;
+      background: #d2691e;
+      border-radius: 10px;
       position: relative;
+      margin-bottom: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .flame {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      transition: opacity 0.5s ease;
     }
 
     #start-btn {
+      padding: 15px 30px;
       background: #ffffff;
-      color: #000000;
-      padding: 20px 40px;
+      color: #000;
       font-size: 18px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
-      z-index: 2;
-    }
-
-    #start-btn:hover {
-      background: #e0e0e0;
+      margin-top: 20px;
+      display: none;
     }
 
     video {
       display: none;
-      max-width: 100%;
-      max-height: 90vh;
+      max-width: 90vw;
+      max-height: 50vh;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      z-index: 2;
+      margin-top: 20px;
     }
 
-    .emoji {
-      position: absolute;
-      top: -50px;
-      font-size: 32px;
-      animation: fall linear infinite;
-      z-index: 1;
-      pointer-events: none;
+    #typed-text {
+      margin-top: 30px;
+      font-size: 20px;
+      max-width: 90vw;
+      min-height: 40px;
+      white-space: pre-wrap;
+      border-right: 2px solid white;
+      display: inline-block;
+      overflow: hidden;
     }
 
-    @keyframes fall {
-      to {
-        transform: translateY(110vh);
-        opacity: 0;
-      }
+    @keyframes blink {
+      0%, 100% { border-color: white; }
+      50% { border-color: transparent; }
+    }
+
+    #typed-text.typing {
+      animation: blink 0.8s step-end infinite;
     }
   </style>
 </head>
 <body>
-  <h1 style="z-index:2;">🎉 Поздравление 🎉</h1>
-  <button id="start-btn">Нажми, чтобы услышать 🎉</button>
+  <div class="cake" id="cake">
+    <div class="flame" id="flame">🔥</div>
+    <div style="position:absolute;bottom:10px;width:100%;font-size:18px;">🎂 Задуй свечу 🎂</div>
+  </div>
+
+  <button id="start-btn">Нажми, чтобы посмотреть 🎥</button>
+
   <video id="video" controls playsinline>
-    <source src="video.mp4" type="video/mp4">
+    <source src="video.mp4" type="video/mp4" />
     Ваш браузер не поддерживает видео.
   </video>
 
-  <script>
-    const btn = document.getElementById('start-btn');
-    const video = document.getElementById('video');
+  <div id="typed-text"></div>
 
-    btn.addEventListener('click', () => {
-      btn.style.display = 'none';
+  <script>
+    const cake = document.getElementById('cake');
+    const flame = document.getElementById('flame');
+    const button = document.getElementById('start-btn');
+    const video = document.getElementById('video');
+    const typedText = document.getElementById('typed-text');
+
+    cake.addEventListener('click', () => {
+      flame.style.opacity = 0;
+      button.style.display = 'inline-block';
+    });
+
+    button.addEventListener('click', () => {
+      button.style.display = 'none';
       video.style.display = 'block';
       video.play();
     });
 
-    function createFallingEmoji() {
-      const emoji = document.createElement('div');
-      emoji.classList.add('emoji');
-      emoji.innerText = '🎂';
-      emoji.style.left = Math.random() * 100 + 'vw';
-      emoji.style.animationDuration = (4 + Math.random() * 4) + 's';
-      emoji.style.fontSize = (24 + Math.random() * 16) + 'px';
-      document.body.appendChild(emoji);
+    video.addEventListener('ended', () => {
+      startTyping();
+    });
 
-      setTimeout(() => {
-        emoji.remove();
-      }, 10000);
+    function startTyping() {
+      const message = "Дорогой друг!
+С днём рождения тебя 🎉 Желаем счастья, здоровья и исполнения всех мечт! Спасибо, что ты есть 💖";
+      let index = 0;
+      typedText.classList.add('typing');
+      const interval = setInterval(() => {
+        typedText.textContent = message.slice(0, index);
+        index++;
+        if (index > message.length) {
+          clearInterval(interval);
+          typedText.classList.remove('typing');
+        }
+      }, 50);
     }
-
-    setInterval(createFallingEmoji, 250);
   </script>
 </body>
 </html>
